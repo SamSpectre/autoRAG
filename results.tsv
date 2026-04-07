@@ -1,0 +1,20 @@
+experiment_id	decision	old_score	new_score	files_modified	reindexed	description
+000	baseline	0.000000	0.208000	-	no	Baseline evaluation: 500 dev questions, accuracy=0.394, hallucination=0.186, P=158 A=39 M=210 I=93, cost=$3.89
+001	discard	0.208000	0.190000	answer_generator.md	no	Added "try hard to answer" + question-type guidance + conciseness rules. Accuracy +0.016 but hallucination +0.034, net negative. 100q, cost=$0.93
+002	keep	0.208000	0.260000	config.yaml	no	Raised confidence_threshold 0.7->0.85. Hallucination 18.6%->13.0%, accuracy 39.4%->39.0%. 100q, cost=$0.78
+003	keep	0.260000	0.310000	query_classifier.md	no	Improved false premise detection with 5 categories + examples. FP score 0.364->0.727. Hallucination 13%->11%. 100q, cost=$0.78
+004	discard	0.310000	0.310000	config.yaml	no	Changed top_k 5->8. Same score, more perfect (38 vs 35) but fewer acceptable. Costs 24% more ($0.97). No net gain.
+005	keep	0.310000	0.320000	answer_validator.md	no	Stricter validator with hallucination patterns + "when in doubt score LOW". Hallucination 11%->10%. 100q, cost=$0.81
+006	discard	0.320000	0.320000	config.yaml	no	Upgraded classifier Haiku->Sonnet. Same score, same FP detection. Cost +48% ($1.20 vs $0.81). No benefit.
+007	discard	0.320000	0.310000	query_rewriter.md	no	Added comparison/conditional rewriting guidance. Comparison got worse (1P/15M vs 2P/11M). Hallucination 10%->11%.
+008	discard	0.320000	0.060000	config.yaml	no	Switched search_type vector->hybrid. LanceDB FTS error on ~88/100 questions. Incompatible query format.
+009	keep	0.320000	0.330000	config.yaml	no	Lowered confidence_threshold 0.85->0.80. Accuracy 42%->43%, hallucination stays 10%. 100q, cost=$0.81
+010	discard	0.330000	0.210000	answer_generator.md	no	Forced extreme conciseness + strict no-markdown rules. Hallucination 10%->14%, accuracy 43%->35%. Terse answers hallucinate more.
+011	keep	0.330000	0.360000	config.yaml	no	Upgraded validator Haiku->Sonnet. Accuracy 43%->46%, hallucination stays 10%. Better calibrated confidence. 100q, cost=$1.23
+012	discard	0.360000	0.280000	config.yaml	no	Lowered threshold 0.80->0.75. Hallucination 10%->15%. Too many incorrect answers let through. 0.80 is the sweet spot.
+013	discard	0.360000	0.290000	config.yaml	no	Upgraded rewriter Haiku->Sonnet. Hallucination 10%->13%, comparison -0.176. Sonnet rewrites too verbose for vector search. Cost $1.33.
+014	discard	0.360000	0.310000	config.yaml	no	Disabled query_rewriting. Accuracy 43%->45% but hallucination 10%->14%. Rewriter helps retrieval quality.
+015	discard	0.360000	0.320000	answer_generator.md	no	Added "don't use world knowledge" reinforcement. Hallucination 10%->13%. Confused model's confidence calibration.
+016	discard	0.360000	0.310000	config.yaml	no	Changed top_k 5->7. Hallucination 10%->15% (more chunks = more noise). Accuracy same at 46%.
+017	discard	0.360000	0.230000	config.yaml	yes	chunk_size 512->256, overlap 100->50. Accuracy 46%->35%, 53 missing. Chunks too small for complete answers.
+018	discard	0.360000	-	config.yaml	yes	chunk_size 512->1024, overlap 100->200. FAILED: OpenAI 300k token/request limit exceeded. Can't use without code changes.
